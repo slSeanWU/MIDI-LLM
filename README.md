@@ -4,7 +4,7 @@ Built on **Llama 3.2 (1B)** with an extended vocabulary for MIDI tokens.
 
 ## Research Paper
 - Shih-Lun Wu, Yoon Kim, and Cheng-Zhi Anna Huang.  
-  "**MIDI-LLM: Adapting large language models for text-to-MIDI music generation**."  
+  "**MIDI-LLM: Adapting Large Language Models for Text-to-MIDI Music Generation**."  
   NeurIPS AI4Music Workshop, 2025.
 
 ## Setup
@@ -54,46 +54,54 @@ pip install -r requirements.txt
 python -c "import torch; from vllm import LLM; from anticipation.convert import events_to_midi; print('Setup successful')"
 ```
 
-## Run Inference with vLLM
-### Example 1: Single prompt
+## Inference (Generation) Usage
+
+**IMPORTANT**: We provide two inference backends with different trade-offs:
+- **vLLM** (`generate_vllm.py`): Faster token generation but more complex setup and longer initialization. **Recommended for batch inference (multiple prompts) or interactive sessions.**
+- **Transformers** (`generate_transformers.py`): Simpler setup and faster initialization, but slower generation. **Recommended for quick single-prompt testing.**
+
+Both scripts share the same arguments (except for `--fp8` quantization, which only works in vLLM) and output format.
+
+### Example 1: Single prompt (use transformers)
 ```bash
-python generate_vllm.py \
-    --model slseanwu/MIDI-LLM_Llama-3.2-1B # will pull from huggingface hub \
+python generate_transformers.py \
     --prompt "A cheerful piano melody"
 ```
-This will output 4 MIDIs (and the synthesized MP3s) conditioned on the same input prompt
+Outputs 4 MIDIs (and synthesized MP3s) conditioned on the same prompt by default.
 
-### Example 2: Batch generation from file
+### Example 2: Batch generation from file (use vLLM)
 
 ```bash
 python generate_vllm.py \
-    --model slseanwu/MIDI-LLM_Llama-3.2-1B \
     --prompts_file some_example_prompts.txt \
     --fp8 \
     --no-synthesize
 ```
 - `some_example_prompts.txt` should contain one prompt per line.
-- `--fp8` performs dynamic weight quantization for faster inference.
-- `--no-synthesize` skips audio synthesis (i.e., outputs MIDI only).
+- `--fp8` performs FP8 quantization for faster inference.
+- `--no-synthesize` skips audio synthesis (outputs MIDI only).
 
-### Example 3: Interactive mode
+### Example 3: Interactive mode (use vLLM)
 
 ```bash
 python generate_vllm.py \
-    --model slseanwu/MIDI-LLM_Llama-3.2-1B \
+    --interactive \
     --output_root generations_interactive/ \
-    --interactive
+    --n_outputs 1
 ```
-- Outputs will be saved under `generations_interactive/`
-This loads the model once, then lets you enter prompts interactively. Press Enter with empty prompt to exit.
+Loads the model once, then lets you enter prompts continuously. Press Enter with an empty prompt to exit.
+
+- Outputs will be stored under `generations_interactive/`
+- `--n_outputs 1` generates only 1 output for each prompt
 
 ### More options
-See full options with:
+See full options for either script with:
 ```bash
+python generate_transformers.py --help # or
 python generate_vllm.py --help
 ```
 
-### Inference Output Structure
+### Inference output structure
 ```
 [output_root]/
 └── 2025-10-30_143022/           # Session timestamp
@@ -104,3 +112,54 @@ python generate_vllm.py --help
     │   └── ...
     └── generation_stats.json
 ```
+
+## Example Prompts
+
+Here are some example prompts to get you started. The model can work with both detailed descriptions similar to what's seen at training, and creative free-form prompts.
+
+### In-Domain Examples (from validation set)
+
+<details>
+<summary><b>Example 1: Rock with pop influence</b></summary>
+
+```
+A melodic and energetic rock song with a touch of pop influence, featuring synth 
+strings, piano, distortion guitar, synth voice, and drums, all contributing to a 
+blend of happy and dark moods. Set in the key of A minor with a 4/4 time signature, 
+this fast-paced track showcases a chord progression of Bm, Cmaj7, and Gmaj7.
+```
+
+</details>
+
+<details>
+<summary><b>Example 2: Classical soundtrack</b></summary>
+
+```
+A slow and relaxing classical piece featuring a church organ and French horn, likely 
+to be used as a soundtrack in a dramatic or emotional film. Written in A minor and 4/4 
+time. The chord progression of E7, Am, and E contributes to the piece's sentimental 
+atmosphere.
+```
+
+</details>
+
+### Creative Custom Prompts
+
+<details>
+<summary><b>Example 3: Road trip song</b></summary>
+
+```
+An energetic and motivating pop song you love to hear on a long road trip.
+```
+
+</details>
+
+<details>
+<summary><b>Example 4: Sunday picnic jazz</b></summary>
+
+```
+Upbeat and playful jazz music with lively saxophones, like you're going out on a 
+Sunday picnic.
+```
+
+</details>
