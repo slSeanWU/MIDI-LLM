@@ -65,7 +65,7 @@ Both scripts share the same arguments (except for `--fp8` quantization, which on
 ### Example 1: Single prompt (use transformers)
 ```bash
 python generate_transformers.py \
-    --prompt "A cheerful piano melody"
+    --prompt "A cheerful rock song with bright electric guitars"
 ```
 Outputs 4 MIDIs (and synthesized MP3s) conditioned on the same prompt by default.
 

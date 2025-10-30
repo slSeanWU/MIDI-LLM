@@ -232,7 +232,7 @@ Examples:
       --top_p 0.98
         """
     )
-    
+
     # Required arguments
     parser.add_argument(
         "--model",
@@ -240,7 +240,7 @@ Examples:
         default="slseanwu/MIDI-LLM_Llama-3.2-1B",
         help="Path to MIDI-LLM model checkpoint, can be HuggingFace model ID or local path (default: slseanwu/MIDI-LLM_Llama-3.2-1B)"
     )
-    
+
     # Input arguments (not required if using --interactive only)
     input_group = parser.add_mutually_exclusive_group(required=False)
     input_group.add_argument(
@@ -253,7 +253,7 @@ Examples:
         type=str,
         help="Path to file containing prompts (one per line)"
     )
-    
+
     # Output arguments
     parser.add_argument(
         "--output_root",
@@ -267,7 +267,7 @@ Examples:
         default=DEFAULT_N_OUTPUTS,
         help=f"Number of outputs to generate per prompt (default: {DEFAULT_N_OUTPUTS})"
     )
-    
+
     # Synthesis arguments
     parser.add_argument(
         "--no-synthesize",
@@ -282,7 +282,7 @@ Examples:
         default="./soundfonts/FluidR3_GM/FluidR3_GM.sf2",
         help="Path to SoundFont file for synthesis (default: ./soundfonts/FluidR3_GM/FluidR3_GM.sf2)"
     )
-    
+
     # Generation parameters
     parser.add_argument(
         "--temperature",
@@ -302,7 +302,7 @@ Examples:
         default=DEFAULT_MAX_TOKENS,
         help=f"Maximum tokens to generate (default: {DEFAULT_MAX_TOKENS})"
     )
-    
+
     # Model arguments
     parser.add_argument(
         "--fp8",
@@ -326,13 +326,13 @@ Examples:
         action="store_true",
         help="Enter interactive mode after initial generation (keep generating until empty prompt)"
     )
-    
+
     args = parser.parse_args()
-    
+
     # Validate that either prompts are provided or interactive mode is enabled
     if not args.prompt and not args.prompts_file and not args.interactive:
         parser.error("Either --prompt, --prompts_file, or --interactive must be specified")
-    
+
     # Load prompts (if provided)
     prompts = []
     if args.prompt:
@@ -341,7 +341,7 @@ Examples:
         with open(args.prompts_file, "r") as f:
             prompts = [line.strip() for line in f if line.strip()]
         print(f"Loaded {len(prompts)} prompts from {args.prompts_file}")
-    
+
     # Check synthesis requirements
     if args.synthesize:
         soundfont_path = Path(args.soundfont)
@@ -349,30 +349,30 @@ Examples:
             print(f"Error: SoundFont not found at {soundfont_path}")
             print("Please download a SoundFont or disable synthesis with --no-synthesize")
             sys.exit(1)
-        
+
         if not SYNTHESIS_AVAILABLE:
             print("Warning: Audio synthesis libraries not available.")
             print("Synthesis will be skipped. Install dependencies:")
             print("  conda install conda-forge::fluidsynth conda-forge::ffmpeg")
             print("  pip install midi2audio librosa soundfile")
             args.synthesize = False
-    
+
     # Create output root directory with timestamp
     output_root = Path(args.output_root)
     session_timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
     output_dir = output_root / session_timestamp
     output_dir.mkdir(parents=True, exist_ok=True)
-    
+
     print(f"Output directory: {output_dir.absolute()}\n")
-    
+
     # Load tokenizer from the model checkpoint (not base Llama!)
-    print("Loading tokenizer...")
+    print("Loading tokenizer and model...")
     tokenizer = AutoTokenizer.from_pretrained(
         args.model,  # Use the model checkpoint path, not base Llama
         cache_dir=args.cache_dir,
         pad_token="<|eot_id|>",
     )
-    
+
     # Load model
     model, sampling_params = prepare_vllm_model(
         model_path=args.model,
@@ -383,12 +383,12 @@ Examples:
         do_fp8_quantization=args.fp8,
         gpu_memory_utilization=args.gpu_memory
     )
-    
+
     # Generate from initial prompts (if provided)
     if prompts:
         print(f"Starting generation for {len(prompts)} prompt(s)...\n")
         start_time = time.time()
-        
+
         stats = generate_from_prompts(
             model=model,
             tokenizer=tokenizer,
@@ -398,9 +398,9 @@ Examples:
             soundfont_path=args.soundfont if args.synthesize else None,
             synthesize=args.synthesize
         )
-        
+
         total_time = time.time() - start_time
-        
+
         # Print summary
         print(f"\n{'='*70}")
         print("Generation Summary")
@@ -409,22 +409,22 @@ Examples:
         print(f"Successful generations: {stats['successful_generations']}")
         print(f"Failed generations: {stats['failed_generations']}")
         print(f"Total time: {total_time:.2f}s")
-        
+
         if stats['generation_times']:
             avg_time = sum(stats['generation_times']) / len(stats['generation_times'])
             print(f"Average generation time: {avg_time:.2f}s (excluding warmup)")
-        
+
         print(f"\nOutputs saved to: {output_dir.absolute()}")
-        
+
         # Print generated files
         if stats['output_files']:
             print(f"\nGenerated files:")
             for file_path in stats['output_files']:
                 file_type = "🎵 MIDI" if file_path.endswith('.mid') else "🎧 Audio"
                 print(f"  {file_type}: {file_path}")
-        
+
         print(f"{'='*70}\n")
-        
+
         # Save stats to JSON
         stats_file = output_dir / "generation_stats.json"
         with open(stats_file, "w") as f:
@@ -443,7 +443,7 @@ Examples:
             }, f, indent=2)
     else:
         print(f"No initial prompts provided. Starting in interactive mode...\n")
-    
+
     # Interactive mode
     if args.interactive:
         print(f"\n{'='*70}")
@@ -451,17 +451,17 @@ Examples:
         print(f"{'='*70}")
         print("Enter prompts to generate more MIDI files.")
         print("Press Enter with empty prompt to exit.\n")
-        
+
         while True:
             try:
                 # Get user input
                 user_prompt = input("Prompt: ").strip()
-                
+
                 # Exit if empty
                 if not user_prompt:
                     print("\nExiting interactive mode. Goodbye!")
                     break
-                
+
                 # Generate from the new prompt
                 print()
                 interactive_stats = generate_from_prompts(
@@ -476,19 +476,19 @@ Examples:
 
                 # Print input prompt
                 print(f"Input prompt: {user_prompt}")
-                
+
                 # Print mini summary
                 print(f"\n✓ Generated {interactive_stats['successful_generations']}/{args.n_outputs} outputs")
                 if interactive_stats['generation_times']:
                     print(f"  Generation time: {interactive_stats['generation_times'][0]:.2f}s")
-                
+
                 # Print file paths
                 if interactive_stats['output_files']:
                     for file_path in interactive_stats['output_files']:
                         file_type = "🎵" if file_path.endswith('.mid') else "🎧"
                         print(f"  {file_type} {file_path}")
                 print()
-                
+
             except KeyboardInterrupt:
                 print("\n\nInterrupted. Exiting interactive mode.")
                 break
