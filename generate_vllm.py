@@ -2,6 +2,7 @@
 """
 This script generates MIDI files from text prompts using the MIDI-LLM model with vLLM backend.
 vLLM provides faster inference compared to standard HuggingFace model.generate() mixin.
+Caveat is that initialization + compilation takes more time, so best used for inference with many prompts.
 """
 
 import json
@@ -235,8 +236,8 @@ Examples:
     parser.add_argument(
         "--model",
         type=str,
-        required=True,
-        help="Path to MIDI-LLM model checkpoint"
+        default="slseanwu/MIDI-LLM_Llama-3.2-1B",
+        help="Path to MIDI-LLM model checkpoint, can be HuggingFace model ID or local path (default: slseanwu/MIDI-LLM_Llama-3.2-1B)"
     )
     
     # Input arguments (not required if using --interactive only)
@@ -494,4 +495,3 @@ Examples:
 
 if __name__ == "__main__":
     main()
-

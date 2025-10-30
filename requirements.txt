@@ -50,6 +50,7 @@ jsonschema-specifications==2025.9.1
 lark==1.2.2
 lazy_loader==0.4
 librosa==0.11.0
+pyloudnorm==0.1.1
 llguidance==0.7.30
 llvmlite==0.44.0
 lm-format-enforcer==0.11.3
@@ -150,3 +151,4 @@ websockets==15.0.1
 xformers==0.0.32.post1
 xgrammar==0.1.25
 yarl==1.22.0
+future==1.0.0

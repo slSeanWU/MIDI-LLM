@@ -23,12 +23,20 @@ except ImportError:
 
 # Optional dependencies for audio synthesis
 SYNTHESIS_AVAILABLE = False
+LOUDNESS_NORM_AVAILABLE = False
 try:
     import midi2audio
     import librosa
     import librosa.effects
     import soundfile as sf
     SYNTHESIS_AVAILABLE = True
+    
+    # Optional loudness normalization
+    try:
+        import pyloudnorm as pyln
+        LOUDNESS_NORM_AVAILABLE = True
+    except ImportError:
+        pass
 except ImportError:
     pass
 
@@ -89,16 +97,18 @@ def synthesize_midi_to_audio(
     midi_path: str, 
     soundfont_path: str,
     save_mp3: bool = True,
-    samplerate: Optional[int] = None
+    samplerate: Optional[int] = None,
+    target_loudness: float = -18.0
 ) -> bool:
     """
-    Synthesize MIDI file to audio (WAV/MP3) using FluidSynth.
+    Synthesize MIDI file to audio (WAV/MP3) using FluidSynth with loudness normalization.
     
     Args:
         midi_path: Path to MIDI file
         soundfont_path: Path to SoundFont (.sf2) file
         save_mp3: If True, convert to MP3 and delete WAV
         samplerate: Optional sample rate for audio
+        target_loudness: Target loudness in LUFS (default: -14.0, Spotify standard)
         
     Returns:
         True if successful, False otherwise
@@ -106,7 +116,7 @@ def synthesize_midi_to_audio(
     if not SYNTHESIS_AVAILABLE:
         print("Warning: Audio synthesis libraries not available. Skipping synthesis.")
         print("Install with: conda install conda-forge::fluidsynth conda-forge::ffmpeg")
-        print("              pip install midi2audio librosa soundfile")
+        print("              pip install midi2audio librosa soundfile pyloudnorm")
         return False
     
     try:
@@ -120,9 +130,27 @@ def synthesize_midi_to_audio(
         # Synthesize MIDI to WAV
         fs.midi_to_audio(midi_path, wav_path)
         
-        # Trim silence from audio
+        # Load and trim silence from audio
         wav, sr = librosa.load(wav_path)
         wav, _ = librosa.effects.trim(wav, top_db=30)
+        
+        # Apply loudness normalization
+        if LOUDNESS_NORM_AVAILABLE:
+            try:
+                # Measure the loudness
+                meter = pyln.Meter(sr)
+                loudness = meter.integrated_loudness(wav)
+                
+                # Normalize to target loudness
+                wav = pyln.normalize.loudness(wav, loudness, target_loudness)
+                
+                # Prevent clipping
+                if wav.max() > 1.0 or wav.min() < -1.0:
+                    wav = wav / max(abs(wav.max()), abs(wav.min()))
+            except Exception as e:
+                print(f"Warning: Loudness normalization failed: {e}")
+        
+        # Write normalized audio
         sf.write(wav_path, wav, sr)
         
         if save_mp3:
