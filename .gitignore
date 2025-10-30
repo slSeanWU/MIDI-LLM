@@ -208,3 +208,5 @@ __marimo__/
 
 # artifacts
 soundfonts/
+generated_outputs/
+test_outputs/

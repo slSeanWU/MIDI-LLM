@@ -6,6 +6,7 @@ anticipation @ git+https://github.com/jthickstun/anticipation.git@af37397922665a
 anyio==4.11.0
 astor==0.8.1
 attrs==25.4.0
+audioread==3.1.0
 blake3==1.0.8
 cachetools==6.2.1
 cbor2==5.7.0
@@ -16,6 +17,7 @@ click==8.2.1
 cloudpickle==3.1.1
 compressed-tensors==0.11.0
 cupy-cuda12x==13.6.0
+decorator==5.2.1
 depyf==0.19.0
 dill==0.4.0
 diskcache==5.6.3
@@ -42,9 +44,12 @@ idna==3.11
 interegular==0.3.3
 Jinja2==3.1.6
 jiter==0.11.1
+joblib==1.5.2
 jsonschema==4.25.1
 jsonschema-specifications==2025.9.1
 lark==1.2.2
+lazy_loader==0.4
+librosa==0.11.0
 llguidance==0.7.30
 llvmlite==0.44.0
 lm-format-enforcer==0.11.3
@@ -84,6 +89,8 @@ outlines_core==0.2.11
 packaging==25.0
 partial-json-parser==0.2.1.1.post6
 pillow==11.3.0
+platformdirs==4.5.0
+pooch==1.8.2
 prometheus-fastapi-instrumentator==7.1.0
 prometheus_client==0.23.1
 propcache==0.4.1
@@ -111,6 +118,7 @@ rich-toolkit==0.15.1
 rignore==0.7.1
 rpds-py==0.28.0
 safetensors==0.6.2
+scikit-learn==1.7.2
 scipy==1.16.2
 sentencepiece==0.2.1
 sentry-sdk==2.42.1
@@ -121,6 +129,7 @@ soundfile==0.13.1
 soxr==1.0.0
 starlette==0.48.0
 sympy==1.14.0
+threadpoolctl==3.6.0
 tiktoken==0.12.0
 tokenizers==0.22.1
 torch==2.8.0
