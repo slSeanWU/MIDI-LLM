@@ -83,6 +83,7 @@ def prepare_vllm_model(
     
     model = LLM(
         model=model_path,
+        tokenizer=model_path,  # Explicitly use tokenizer from model checkpoint
         quantization="fp8" if do_fp8_quantization else None,
         gpu_memory_utilization=gpu_memory_utilization,
         trust_remote_code=True,
@@ -364,10 +365,10 @@ Examples:
     
     print(f"Output directory: {output_dir.absolute()}\n")
     
-    # Load tokenizer
+    # Load tokenizer from the model checkpoint (not base Llama!)
     print("Loading tokenizer...")
     tokenizer = AutoTokenizer.from_pretrained(
-        LLAMA_MODEL_NAME,
+        args.model,  # Use the model checkpoint path, not base Llama
         cache_dir=args.cache_dir,
         pad_token="<|eot_id|>",
     )
@@ -472,6 +473,9 @@ Examples:
                     soundfont_path=args.soundfont if args.synthesize else None,
                     synthesize=args.synthesize
                 )
+
+                # Print input prompt
+                print(f"Input prompt: {user_prompt}")
                 
                 # Print mini summary
                 print(f"\n✓ Generated {interactive_stats['successful_generations']}/{args.n_outputs} outputs")
