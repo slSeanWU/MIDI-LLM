@@ -5,7 +5,8 @@ Built on **Llama 3.2 (1B)** with an extended vocabulary for MIDI tokens.
 ## Research Paper
 - Shih-Lun Wu, Yoon Kim, and Cheng-Zhi Anna Huang.  
   "**MIDI-LLM: Adapting Large Language Models for Text-to-MIDI Music Generation**."  
-  NeurIPS AI4Music Workshop, 2025.
+  NeurIPS AI4Music Workshop, 2025.  
+  [[Live Demo](https://midi-llm-demo.vercel.app)] [[Model](https://huggingface.co/slseanwu/MIDI-LLM_Llama-3.2-1B)] \[Paper (coming soon)\]
 
 ## Setup
 
