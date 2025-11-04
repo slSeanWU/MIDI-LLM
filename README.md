@@ -164,3 +164,15 @@ Sunday picnic.
 ```
 
 </details>
+
+## Citation
+
+If you find our repo and model useful, please cite our research as
+```bibtex
+@inproceedings{wu2025midillm,
+  title={{MIDI-LLM}: Adapting large language models for text-to-{MIDI} music generation},
+  author={Wu, Shih-Lun and Kim, Yoon and Huang, Cheng-Zhi Anna},
+  booktitle={Proc. NeurIPS AI4Music Workshop},
+  year={2025}
+}
+```
