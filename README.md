@@ -81,11 +81,11 @@ Outputs 4 MIDIs (and synthesized MP3s) conditioned on the same prompt by default
 
 ```bash
 python generate_vllm.py \
-    --prompts_file some_example_prompts.txt \
+    --prompts_file assets/example_prompts.txt \
     --fp8 \
     --no-synthesize
 ```
-- `some_example_prompts.txt` should contain one prompt per line.
+- [`assets/example_prompts.txt`](assets/example_prompts.txt) contains 4 example prompts (one per line).
 - `--fp8` performs FP8 quantization for faster inference.
 - `--no-synthesize` skips audio synthesis (outputs MIDI only).
 
@@ -183,6 +183,8 @@ We provide high-level guidance for researchers interested in training their own 
 2. **Tokenize MIDI files**: Use the [Anticipation](https://github.com/jthickstun/anticipation/) library to convert MIDI files to token sequences
 3. **Collect text prompts**: Obtain text descriptions for your MIDI files (e.g., [MidiCaps](https://huggingface.co/datasets/amaai-lab/MidiCaps) in our use case)
 4. **Match text-MIDI examples**: Ensure you can map each text prompt to its corresponding MIDI file
+
+**Note**: The 896 LakhMIDI IDs used for evaluation in our paper are available in [`assets/evaluation_set_lakh_ids.txt`](assets/evaluation_set_lakh_ids.txt).
 
 </details>
 
