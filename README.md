@@ -1,12 +1,19 @@
 # MIDI-LLM
 
-Built on **Llama 3.2 (1B)** with an extended vocabulary for MIDI tokens.
+### 🎸 [Live Demo](https://midi-llm-demo.vercel.app) | 🤗 [Model](https://huggingface.co/slseanwu/MIDI-LLM_Llama-3.2-1B) | 📑 Paper (coming soon)
 
-## Research Paper
 - Shih-Lun Wu, Yoon Kim, and Cheng-Zhi Anna Huang.  
   "**MIDI-LLM: Adapting Large Language Models for Text-to-MIDI Music Generation**."  
-  NeurIPS AI4Music Workshop, 2025.  
-  [[Live Demo](https://midi-llm-demo.vercel.app)] [[Model](https://huggingface.co/slseanwu/MIDI-LLM_Llama-3.2-1B)] \[Paper (coming soon)\]
+  NeurIPS AI4Music Workshop, 2025.
+
+Built on **Llama 3.2 (1B)** with an extended vocabulary for MIDI tokens.
+
+
+- **[Setup](#setup)**
+- **[Inference (Generation) Usage](#inference-generation-usage)**
+- **[Example Prompts](#example-prompts)**
+- **[Training Guidelines](#training-guidelines)**
+- **[Citation](#citation)**
 
 ## Setup
 
@@ -162,6 +169,32 @@ An energetic and motivating pop song you love to hear on a long road trip.
 Upbeat and playful jazz music with lively saxophones, like you're going out on a 
 Sunday picnic.
 ```
+
+</details>
+
+## Training Guidelines
+
+We provide high-level guidance for researchers interested in training their own models. If there is sufficient interest from the community, we will consider releasing the full data processing and training pipeline.
+
+<details>
+<summary><b>Data Preparation</b></summary>
+
+1. **Collect MIDI data**: E.g., download the [Lakh MIDI Dataset](https://colinraffel.com/projects/lmd/)
+2. **Tokenize MIDI files**: Use the [Anticipation](https://github.com/jthickstun/anticipation/) library to convert MIDI files to token sequences
+3. **Collect text prompts**: Obtain text descriptions for your MIDI files (e.g., [MidiCaps](https://huggingface.co/datasets/amaai-lab/MidiCaps) in our use case)
+4. **Match text-MIDI examples**: Ensure you can map each text prompt to its corresponding MIDI file
+
+</details>
+
+<details>
+<summary><b>Training Process</b></summary>
+
+1. **Create training dataloader**: Write a PyTorch [Dataset and DataLoader](https://pytorch.org/tutorials/beginner/basics/data_tutorial.html) to generate paired text-MIDI training examples
+2. **Setup environment**: Install and configure [Accelerate](https://huggingface.co/docs/accelerate/en/basic_tutorials/install)
+3. **Start training**: Use the [HuggingFace Trainer](https://huggingface.co/learn/llm-course/en/chapter3/3) with our pretrained model at [slseanwu/MIDI-LLM_Llama-3.2-1B](https://huggingface.co/slseanwu/MIDI-LLM_Llama-3.2-1B) as the starting point
+4. **Optional optimizations**:
+   - Install [FlashAttention](https://github.com/Dao-AILab/flash-attention) for memory and speed improvements
+   - See [multi-GPU training guide](https://huggingface.co/docs/accelerate/en/basic_tutorials/launch) for distributed training
 
 </details>
 
