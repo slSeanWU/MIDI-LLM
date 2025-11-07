@@ -15,8 +15,6 @@ Built on **Llama 3.2 (1B)** with an extended vocabulary for MIDI tokens.
 - **[Training Guidelines](#training-guidelines)**
 - **[Citation](#citation)**
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/rAbeujf_Plg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 ## Setup
 
 - A GPU with 16GB+ VRAM and CUDA 12.x is recommended
