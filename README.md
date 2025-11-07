@@ -1,6 +1,6 @@
 # MIDI-LLM
 
-### 🎸 [Live Demo](https://midi-llm-demo.vercel.app) | 🤗 [Model](https://huggingface.co/slseanwu/MIDI-LLM_Llama-3.2-1B) | 📑 Paper (coming soon)
+### 🎸 [Live Demo](https://midi-llm-demo.vercel.app) | 🤗 [Model](https://huggingface.co/slseanwu/MIDI-LLM_Llama-3.2-1B) | 📑 [Paper](https://arxiv.org/abs/2511.03942)
 
 - Shih-Lun Wu, Yoon Kim, and Cheng-Zhi Anna Huang.  
   "**MIDI-LLM: Adapting Large Language Models for Text-to-MIDI Music Generation**."  
