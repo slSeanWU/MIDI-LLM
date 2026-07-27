@@ -2,10 +2,11 @@
 
 ###  🎸 [Live Demo](https://midi-llm-demo.vercel.app) | 🎬 [Video](https://youtu.be/rAbeujf_Plg?si=wbhYIwpXZiy8OAi4) | 🤗 [Model](https://huggingface.co/slseanwu/MIDI-LLM_Llama-3.2-1B) | 📑 [Paper](https://arxiv.org/abs/2511.03942)
 
-- Shih-Lun Wu, Yoon Kim, and Cheng-Zhi Anna Huang.  
-  "**MIDI-LLM: Adapting Large Language Models for Text-to-MIDI Music Generation**."  
-  NeurIPS AI4Music Workshop, 2025.
-
+- Shih-Lun Wu, Dave Carlton, Ryan Mikayawa, Yoon Kim, Chris Donahue*, and Cheng-Zhi Anna Huang*.  
+  "**MIDI-LLM: Improving text-to-MIDI music generation via adapting large language models**."  
+  International Society for Music Information Retrieval Conference (**ISMIR**), 2026.  
+  _MIT, Hooktheory, CMU_
+   
 Built on **Llama 3.2 (1B)** with an extended vocabulary for MIDI tokens.
 
 
@@ -204,10 +205,10 @@ We provide high-level guidance for researchers interested in training their own 
 
 If you find our repo and model useful, please cite our research as
 ```bibtex
-@inproceedings{wu2025midillm,
-  title={{MIDI-LLM}: Adapting large language models for text-to-{MIDI} music generation},
-  author={Wu, Shih-Lun and Kim, Yoon and Huang, Cheng-Zhi Anna},
-  booktitle={Proc. NeurIPS AI4Music Workshop},
-  year={2025}
+@inproceedings{wu2026midillm,
+  title={{MIDI-LLM}: Improving text-to-{MIDI} music generation via adapting large language models},
+  author={Wu, Shih-Lun and Carlton, Dave and Mikayawa, Ryan and Kim, Yoon and Donahue, Chris and Huang, Cheng-Zhi Anna},
+  booktitle={Proc. Int. Soc. for Music Information Retrieval Conference (ISMIR)},
+  year={2026}
 }
 ```
